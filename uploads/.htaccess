@@ -1,0 +1,3 @@
+# Block all direct access to uploaded files.
+# Recordings must only be served through stream.php, which checks enrollment.
+Require all denied

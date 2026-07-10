@@ -1,0 +1,13 @@
+# Attempt to raise upload limits for video recordings.
+# This only works if Hostinger's PHP is running as mod_php.
+# If uploads still fail, set these via hPanel instead — see uploads-config.md.
+<IfModule mod_php.c>
+    php_value upload_max_filesize 512M
+    php_value post_max_size 512M
+    php_value max_execution_time 600
+    php_value max_input_time 600
+    php_value memory_limit 512M
+</IfModule>
+
+# Pretty error handling
+ErrorDocument 404 /index.php
