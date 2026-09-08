@@ -29,7 +29,7 @@
                 <?php endif; ?>
             <?php else: ?>
                 <a href="/login.php" class="btn btn-outline">Login</a>
-                <a href="/register.php" class="btn btn-primary">Enroll Now</a>
+                <a href="/courses.php?category=it-support" class="btn btn-primary">Explore IT Support</a>
             <?php endif; ?>
             <button class="nav-toggle" aria-label="Toggle menu">&#9776;</button>
         </div>

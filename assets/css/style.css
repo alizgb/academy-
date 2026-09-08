@@ -198,25 +198,32 @@ h1, h2, h3, h4 {
 
 /* ============ HERO ============ */
 .hero {
-    padding: 88px 0 72px;
+    padding: 72px 0 80px;
+}
+
+.hero .container {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 56px;
+    align-items: center;
 }
 
 .hero-inner {
-    max-width: 700px;
+    max-width: 560px;
 }
 
 .hero h1 {
-    font-size: clamp(36px, 5.5vw, 58px);
-    margin: 0 0 22px;
+    font-size: clamp(34px, 4.6vw, 52px);
+    margin: 0 0 20px;
 }
 
 .hero h1 .accent { color: var(--primary); }
 
 .hero-lead {
-    font-size: 18px;
+    font-size: 17.5px;
     color: var(--muted-foreground);
-    max-width: 580px;
-    margin-bottom: 32px;
+    max-width: 520px;
+    margin-bottom: 28px;
 }
 
 .hero-actions {
@@ -224,13 +231,18 @@ h1, h2, h3, h4 {
     align-items: center;
     gap: 8px;
     flex-wrap: wrap;
-    margin-bottom: 24px;
+    margin-bottom: 22px;
 }
 
 .hero-meta {
     font-size: 14px;
     color: var(--dim);
     letter-spacing: 0.01em;
+}
+
+.hero-visual .asset-slot {
+    min-height: 340px;
+    border-radius: var(--radius-lg);
 }
 
 /* ============ SECTIONS ============ */
@@ -335,11 +347,25 @@ h1, h2, h3, h4 {
 /* ============ FLAGSHIP COURSE SPOTLIGHT ============ */
 .flagship {
     border: 1px solid var(--border);
+    border-top: 3px solid var(--primary);
     border-radius: var(--radius-lg);
-    padding: 48px;
+    padding: 44px 48px 48px;
     display: grid;
     grid-template-columns: 1.3fr 1fr;
     gap: 40px;
+    background: var(--card);
+}
+
+.flagship-badge {
+    display: inline-flex;
+    align-items: center;
+    background: var(--accent-soft);
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 100px;
+    margin-bottom: 16px;
 }
 
 .flagship-body h3 { font-size: 26px; margin-bottom: 12px; }
@@ -438,39 +464,54 @@ h1, h2, h3, h4 {
     color: var(--dim);
 }
 
-/* ============ ASSET PLACEHOLDER SLOTS (practical proof / instructor / certificate) ============ */
-.proof-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
-}
-
+/* ============ ASSET PLACEHOLDER SLOTS (hero / instructor / certificate) ============
+   Subtle by design: a placeholder should read as "designed", not "unfinished". */
 .asset-slot {
-    border: 1px dashed var(--border-strong);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
     background: var(--muted);
-    aspect-ratio: 4 / 3;
+    min-height: 160px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 20px;
+    gap: 8px;
+    padding: 24px;
 }
+
+.asset-slot .slot-icon { color: var(--border-strong); }
 
 .asset-slot .label {
-    font-size: 13.5px;
+    font-size: 12.5px;
     color: var(--dim);
     font-weight: 500;
-    max-width: 180px;
+    max-width: 200px;
 }
 
-.asset-slot img { border-radius: var(--radius); width: 100%; height: 100%; object-fit: cover; }
+.asset-slot img { border-radius: inherit; width: 100%; height: 100%; object-fit: cover; }
+.asset-slot:has(img) { padding: 0; border-style: solid; background: none; }
 
-.proof-caption {
-    font-size: 13px;
-    color: var(--muted-foreground);
-    margin-top: 10px;
+/* ============ PRACTICAL PROOF ============ */
+.proof-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
 }
+
+.proof-visual .asset-slot { min-height: 300px; }
+
+.proof-points li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 15.5px;
+}
+.proof-points li:last-child { border-bottom: none; }
+.proof-points .check { flex-shrink: 0; width: 19px; height: 19px; margin-top: 2px; color: var(--primary); }
 
 /* ============ INSTRUCTOR ============ */
 .instructor {
@@ -501,11 +542,36 @@ h1, h2, h3, h4 {
     padding: 26px;
 }
 
+.testimonial-card.featured {
+    order: -1;
+    grid-column: 1 / -1;
+    background: var(--accent-soft);
+    border-color: var(--primary);
+    padding: 32px;
+}
+
+.testimonial-badge {
+    display: inline-flex;
+    align-items: center;
+    background: var(--primary);
+    color: var(--primary-foreground);
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 4px 11px;
+    border-radius: 100px;
+    margin-bottom: 16px;
+}
+
 .testimonial-quote {
     font-size: 15.5px;
     color: var(--foreground);
     margin-bottom: 22px;
     line-height: 1.7;
+}
+
+.testimonial-card.featured .testimonial-quote {
+    font-size: 19px;
+    font-weight: 500;
 }
 
 .testimonial-author {
@@ -906,6 +972,11 @@ footer {
     .instructor { grid-template-columns: 120px 1fr; }
     .certificate-block { grid-template-columns: 1fr; }
     .outcome-grid { grid-template-columns: 1fr; }
+    .hero .container { grid-template-columns: 1fr; }
+    .hero-visual { order: -1; }
+    .hero-visual .asset-slot { min-height: 220px; }
+    .proof-layout { grid-template-columns: 1fr; }
+    .proof-visual .asset-slot { min-height: 220px; }
 }
 
 @media (max-width: 600px) {

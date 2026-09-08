@@ -39,21 +39,35 @@ function tca_check() {
     return '<svg class="check" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16.5 5.5L8 14 3.5 9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 }
 
+// A real asset when we have one, otherwise a subtle (not empty-feeling) placeholder.
+function tca_asset_slot($label, $src = null, $alt = '') {
+    if ($src) {
+        return '<div class="asset-slot"><img src="' . htmlspecialchars($src) . '" alt="' . htmlspecialchars($alt) . '"></div>';
+    }
+    $icon = '<svg class="slot-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="9" cy="10.5" r="1.6" stroke="currentColor" stroke-width="1.6"/><path d="M21 15l-5.5-4.5a1.5 1.5 0 00-2 .1L7 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+    return '<div class="asset-slot">' . $icon . '<span class="label">' . htmlspecialchars($label) . '</span></div>';
+}
+
 include __DIR__ . '/includes/header.php';
 ?>
 
 <section class="hero">
-    <div class="container hero-inner">
-        <h1>From zero to <span class="accent">hired</span> in IT.</h1>
-        <p class="hero-lead">Tech Career Academy trains complete beginners into job-ready IT Support professionals — through live instructor-led sessions on Microsoft Teams and a full library of recordings you can revisit anytime.</p>
-        <div class="hero-actions">
-            <a href="<?= htmlspecialchars($flagship_url) ?>" class="btn btn-primary btn-lg">Explore the IT Support Course</a>
-            <a href="#proof" class="btn btn-ghost btn-lg">See real course material &darr;</a>
+    <div class="container">
+        <div class="hero-inner">
+            <h1>From zero to <span class="accent">hired</span> in IT.</h1>
+            <p class="hero-lead">Tech Career Academy trains complete beginners into job-ready IT Support professionals — through live instructor-led sessions on Microsoft Teams and a full library of recordings you can revisit anytime.</p>
+            <div class="hero-actions">
+                <a href="<?= htmlspecialchars($flagship_url) ?>" class="btn btn-primary btn-lg">Explore the IT Support Course</a>
+                <a href="#proof" class="btn btn-ghost btn-lg">See real course material &darr;</a>
+            </div>
+            <p class="hero-meta">
+                <?= $flagship && $flagship['duration_weeks'] ? (int)$flagship['duration_weeks'] . ' Weeks' : '6 Weeks' ?>
+                &middot; Live + Recorded &middot; Certificate Included
+            </p>
         </div>
-        <p class="hero-meta">
-            <?= $flagship && $flagship['duration_weeks'] ? (int)$flagship['duration_weeks'] . ' Weeks' : '6 Weeks' ?>
-            &middot; Live + Recorded &middot; Certificate Included
-        </p>
+        <div class="hero-visual">
+            <?= tca_asset_slot('Real class or instructor photo — asset needed', $flagship['thumbnail'] ?? null, 'IT Support course') ?>
+        </div>
     </div>
 </section>
 
@@ -83,6 +97,7 @@ include __DIR__ . '/includes/header.php';
         <?php if ($flagship): ?>
         <div class="flagship">
             <div class="flagship-body">
+                <span class="flagship-badge">Flagship Program</span>
                 <h3><?= htmlspecialchars($flagship['title']) ?></h3>
                 <p class="desc"><?= htmlspecialchars($flagship['short_description'] ?: $flagship['description']) ?></p>
 
@@ -129,29 +144,16 @@ include __DIR__ . '/includes/header.php';
             <h2>What the training actually looks like.</h2>
             <p>Real material from the course — not stock photography.</p>
         </div>
-        <div class="proof-grid">
-            <div>
-                <div class="asset-slot">
-                    <?php if ($flagship && !empty($flagship['thumbnail'])): ?>
-                        <img src="<?= htmlspecialchars($flagship['thumbnail']) ?>" alt="IT Support course material">
-                    <?php else: ?>
-                        <span class="label">Real lesson screenshot &mdash; asset needed</span>
-                    <?php endif; ?>
-                </div>
-                <p class="proof-caption">A recorded lesson</p>
+        <div class="proof-layout">
+            <div class="proof-visual">
+                <?= tca_asset_slot('Real lesson or screenshot — asset needed', $flagship['thumbnail'] ?? null, 'IT Support course material') ?>
             </div>
-            <div>
-                <div class="asset-slot"><span class="label">Student dashboard &mdash; asset needed</span></div>
-                <p class="proof-caption">Your dashboard after enrolling</p>
-            </div>
-            <div>
-                <div class="asset-slot"><span class="label">Ticketing exercise &mdash; asset needed</span></div>
-                <p class="proof-caption">A real support-ticket exercise</p>
-            </div>
-            <div>
-                <div class="asset-slot"><span class="label">Live Teams session &mdash; asset needed</span></div>
-                <p class="proof-caption">A live instructor-led session</p>
-            </div>
+            <ul class="proof-points">
+                <li><?= tca_check() ?><span>Real recorded lessons from the actual course library</span></li>
+                <li><?= tca_check() ?><span>Real support-ticket exercises, not simulations</span></li>
+                <li><?= tca_check() ?><span>Live Teams sessions with the instructor</span></li>
+                <li><?= tca_check() ?><span>Your own student dashboard from day one</span></li>
+            </ul>
         </div>
     </div>
 </section>
@@ -163,7 +165,7 @@ include __DIR__ . '/includes/header.php';
             <h2>Taught by someone who has worked the job.</h2>
         </div>
         <div class="instructor">
-            <div class="asset-slot"><span class="label">Instructor photo &mdash; asset needed</span></div>
+            <?= tca_asset_slot('Instructor photo — asset needed') ?>
             <div>
                 <h3><?= htmlspecialchars($flagship['teacher_name'] ?? 'Instructor name pending') ?></h3>
                 <div class="role">IT Support Instructor</div>
@@ -182,8 +184,11 @@ include __DIR__ . '/includes/header.php';
         <div class="testimonial-grid">
             <?php foreach ($testimonials as $t):
                 $initials = strtoupper(substr($t['student_name'], 0, 1));
+                // Hiring-outcome testimonials are the highest-value proof — give them visual priority.
+                $is_hire_proof = (stripos($t['quote'], 'job') !== false) || (stripos($t['role_text'], ' at ') !== false);
             ?>
-            <div class="testimonial-card">
+            <div class="testimonial-card<?= $is_hire_proof ? ' featured' : '' ?>">
+                <?php if ($is_hire_proof): ?><span class="testimonial-badge">Real hiring outcome</span><?php endif; ?>
                 <p class="testimonial-quote">&ldquo;<?= htmlspecialchars($t['quote']) ?>&rdquo;</p>
                 <div class="testimonial-author">
                     <div class="author-avatar"><?= $initials ?></div>
@@ -201,7 +206,7 @@ include __DIR__ . '/includes/header.php';
 <section class="section section-alt" id="certificate">
     <div class="container">
         <div class="certificate-block">
-            <div class="asset-slot"><span class="label">Certificate preview &mdash; asset needed</span></div>
+            <?= tca_asset_slot('Certificate preview — asset needed') ?>
             <div>
                 <span class="eyebrow">Certificate</span>
                 <h2>Finish the course, get a certificate that says so.</h2>
