@@ -4,95 +4,176 @@ require_once __DIR__ . '/config/auth.php';
 
 $page_title = 'Home';
 
-// Fetch categories with course counts
 try {
-    $categories = $pdo->query("
-        SELECT c.*, COUNT(co.id) as course_count
-        FROM categories c
-        LEFT JOIN courses co ON co.category_id = c.id AND co.is_published = 1
-        GROUP BY c.id
-        ORDER BY c.sort_order
-    ")->fetchAll();
+    // Flagship course: the IT Support track is the academy's primary product.
+    $stmt = $pdo->prepare("
+        SELECT co.*, cat.name AS category_name, cat.slug AS category_slug
+        FROM courses co
+        JOIN categories cat ON cat.id = co.category_id
+        WHERE cat.slug = 'it-support' AND co.is_published = 1
+        ORDER BY co.created_at ASC
+        LIMIT 1
+    ");
+    $stmt->execute();
+    $flagship = $stmt->fetch();
+
+    $flagship_recordings = [];
+    if ($flagship) {
+        $stmt = $pdo->prepare("SELECT title FROM recordings WHERE course_id = ? ORDER BY uploaded_at ASC LIMIT 6");
+        $stmt->execute([$flagship['id']]);
+        $flagship_recordings = $stmt->fetchAll();
+    }
 
     $testimonials = $pdo->query("SELECT * FROM testimonials ORDER BY sort_order")->fetchAll();
     $faqs = $pdo->query("SELECT * FROM faqs ORDER BY sort_order")->fetchAll();
 } catch (Exception $e) {
-    $categories = $testimonials = $faqs = [];
+    $flagship = null;
+    $flagship_recordings = [];
+    $testimonials = $faqs = [];
 }
 
-$category_icons = [
-    'headset' => '&#9742;',
-    'network' => '&#9737;',
-    'monitor' => '&#9646;',
-];
+$flagship_url = $flagship ? '/course.php?slug=' . urlencode($flagship['slug']) : '/courses.php';
+
+// Simple inline checkmark, reused across list items below.
+function tca_check() {
+    return '<svg class="check" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16.5 5.5L8 14 3.5 9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+}
 
 include __DIR__ . '/includes/header.php';
 ?>
 
 <section class="hero">
-    <div class="container">
-        <div class="hero-inner">
-            <span class="terminal-badge">$ status --tech-career-academy</span>
-            <span class="eyebrow">Enrolling now &middot; Live &amp; recorded IT training</span>
-            <h1>From zero to <span class="accent">hired</span> in IT.</h1>
-            <p>Tech Career Academy trains beginners into job-ready IT professionals through live instructor-led sessions on Microsoft Teams and a full library of recorded classes you can revisit anytime.</p>
-            <div class="hero-actions">
-                <a href="/register.php" class="btn btn-primary btn-lg">Enroll Now</a>
-                <a href="#courses" class="btn btn-outline btn-lg">Browse Courses</a>
-            </div>
-            <div class="hero-stats">
-                <div>
-                    <div class="hero-stat-num">3</div>
-                    <div class="hero-stat-label">Training tracks</div>
-                </div>
-                <div>
-                    <div class="hero-stat-num">100%</div>
-                    <div class="hero-stat-label">Live + recorded access</div>
-                </div>
-                <div>
-                    <div class="hero-stat-num">0</div>
-                    <div class="hero-stat-label">Experience required</div>
-                </div>
-            </div>
+    <div class="container hero-inner">
+        <h1>From zero to <span class="accent">hired</span> in IT.</h1>
+        <p class="hero-lead">Tech Career Academy trains complete beginners into job-ready IT Support professionals — through live instructor-led sessions on Microsoft Teams and a full library of recordings you can revisit anytime.</p>
+        <div class="hero-actions">
+            <a href="<?= htmlspecialchars($flagship_url) ?>" class="btn btn-primary btn-lg">Explore the IT Support Course</a>
+            <a href="#proof" class="btn btn-ghost btn-lg">See real course material &darr;</a>
         </div>
+        <p class="hero-meta">
+            <?= $flagship && $flagship['duration_weeks'] ? (int)$flagship['duration_weeks'] . ' Weeks' : '6 Weeks' ?>
+            &middot; Live + Recorded &middot; Certificate Included
+        </p>
     </div>
 </section>
 
-<section class="section" id="courses">
+<section class="section" id="transformation">
     <div class="container">
         <div class="section-header">
-            <span class="eyebrow">Training tracks</span>
-            <h2>Pick your path into IT.</h2>
-            <p>Every track combines live Teams sessions with a growing library of recordings, taught by working IT professionals.</p>
+            <h2>Start with no IT experience. Leave with practical IT Support skills.</h2>
+            <p>No lectures. No theory dumps. Every session is built around the actual work a help desk or support technician does on the job.</p>
         </div>
-        <div class="category-grid">
-            <?php if (empty($categories)): ?>
-                <div class="empty-state">Courses will appear here once added by an admin.</div>
-            <?php endif; ?>
-            <?php foreach ($categories as $cat): ?>
-            <div class="category-card">
-                <div class="category-icon"><?= $category_icons[$cat['icon']] ?? '&#9646;' ?></div>
-                <h3><?= htmlspecialchars($cat['name']) ?></h3>
-                <p>
-                    <?php if ($cat['slug'] === 'it-support'): ?>
-                        Help desk fundamentals, troubleshooting, ticketing systems, and customer-facing support skills.
-                    <?php elseif ($cat['slug'] === 'networking'): ?>
-                        Advanced IT support and networking: routers, switches, protocols, and infrastructure basics.
-                    <?php else: ?>
-                        Confident, practical computer use for everyday work — files, browsers, office tools, and safety.
+        <ul class="outcome-grid">
+            <li class="outcome-item"><?= tca_check() ?><span>Troubleshoot real computer problems</span></li>
+            <li class="outcome-item"><?= tca_check() ?><span>Support users professionally</span></li>
+            <li class="outcome-item"><?= tca_check() ?><span>Work with ticketing systems</span></li>
+            <li class="outcome-item"><?= tca_check() ?><span>Manage Windows environments</span></li>
+            <li class="outcome-item"><?= tca_check() ?><span>Understand networking fundamentals</span></li>
+        </ul>
+    </div>
+</section>
+
+<section class="section section-alt" id="course">
+    <div class="container">
+        <div class="section-header">
+            <span class="eyebrow">Flagship program</span>
+            <h2>IT Support Career</h2>
+        </div>
+
+        <?php if ($flagship): ?>
+        <div class="flagship">
+            <div class="flagship-body">
+                <h3><?= htmlspecialchars($flagship['title']) ?></h3>
+                <p class="desc"><?= htmlspecialchars($flagship['short_description'] ?: $flagship['description']) ?></p>
+
+                <div class="flagship-meta">
+                    <div><strong>Level</strong><?= htmlspecialchars(ucfirst($flagship['level'])) ?></div>
+                    <div><strong>Duration</strong><?= $flagship['duration_weeks'] ? (int)$flagship['duration_weeks'] . ' weeks' : 'Self-paced' ?></div>
+                    <div><strong>Format</strong>Live + recorded</div>
+                    <?php if ($flagship['teacher_name']): ?>
+                    <div><strong>Instructor</strong><?= htmlspecialchars($flagship['teacher_name']) ?></div>
                     <?php endif; ?>
-                </p>
-                <div class="category-meta">
-                    <span><?= (int)$cat['course_count'] ?> course<?= $cat['course_count'] == 1 ? '' : 's' ?></span>
-                    <a href="/courses.php?category=<?= urlencode($cat['slug']) ?>" class="category-link">View courses &rarr;</a>
                 </div>
+
+                <ul class="flagship-includes">
+                    <li><?= tca_check() ?> Live sessions on Microsoft Teams, plus a full recorded library</li>
+                    <li><?= tca_check() ?> Real help desk scenarios — support tickets, troubleshooting, customer conversations</li>
+                    <li><?= tca_check() ?> Certificate of completion</li>
+                </ul>
+
+                <a href="<?= htmlspecialchars($flagship_url) ?>" class="btn btn-primary btn-lg">View full course details</a>
             </div>
-            <?php endforeach; ?>
+            <div class="flagship-side">
+                <h4>What's inside</h4>
+                <ul>
+                    <?php if (!empty($flagship_recordings)): ?>
+                        <?php foreach ($flagship_recordings as $r): ?>
+                            <li><?= htmlspecialchars($r['title']) ?></li>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <li>Full syllabus published on the course page</li>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
+        <?php else: ?>
+            <div class="empty-state">Course details will appear here once the IT Support course is published.</div>
+        <?php endif; ?>
+    </div>
+</section>
+
+<section class="section" id="proof">
+    <div class="container">
+        <div class="section-header">
+            <span class="eyebrow">Practical proof</span>
+            <h2>What the training actually looks like.</h2>
+            <p>Real material from the course — not stock photography.</p>
+        </div>
+        <div class="proof-grid">
+            <div>
+                <div class="asset-slot">
+                    <?php if ($flagship && !empty($flagship['thumbnail'])): ?>
+                        <img src="<?= htmlspecialchars($flagship['thumbnail']) ?>" alt="IT Support course material">
+                    <?php else: ?>
+                        <span class="label">Real lesson screenshot &mdash; asset needed</span>
+                    <?php endif; ?>
+                </div>
+                <p class="proof-caption">A recorded lesson</p>
+            </div>
+            <div>
+                <div class="asset-slot"><span class="label">Student dashboard &mdash; asset needed</span></div>
+                <p class="proof-caption">Your dashboard after enrolling</p>
+            </div>
+            <div>
+                <div class="asset-slot"><span class="label">Ticketing exercise &mdash; asset needed</span></div>
+                <p class="proof-caption">A real support-ticket exercise</p>
+            </div>
+            <div>
+                <div class="asset-slot"><span class="label">Live Teams session &mdash; asset needed</span></div>
+                <p class="proof-caption">A live instructor-led session</p>
+            </div>
         </div>
     </div>
 </section>
 
-<section class="section section-alt" id="testimonials">
+<section class="section section-alt" id="instructor">
+    <div class="container">
+        <div class="section-header">
+            <span class="eyebrow">Instructor</span>
+            <h2>Taught by someone who has worked the job.</h2>
+        </div>
+        <div class="instructor">
+            <div class="asset-slot"><span class="label">Instructor photo &mdash; asset needed</span></div>
+            <div>
+                <h3><?= htmlspecialchars($flagship['teacher_name'] ?? 'Instructor name pending') ?></h3>
+                <div class="role">IT Support Instructor</div>
+                <p class="bio">Instructor bio &mdash; content needed. (Real background, companies worked at, and years of experience should replace this placeholder before launch.)</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="testimonials">
     <div class="container">
         <div class="section-header">
             <span class="eyebrow">Student outcomes</span>
@@ -117,6 +198,19 @@ include __DIR__ . '/includes/header.php';
     </div>
 </section>
 
+<section class="section section-alt" id="certificate">
+    <div class="container">
+        <div class="certificate-block">
+            <div class="asset-slot"><span class="label">Certificate preview &mdash; asset needed</span></div>
+            <div>
+                <span class="eyebrow">Certificate</span>
+                <h2>Finish the course, get a certificate that says so.</h2>
+                <p>Students who complete all sessions in the IT Support course receive a certificate of completion &mdash; something real to add to a resume or LinkedIn profile.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section class="section" id="faq">
     <div class="container">
         <div class="section-header">
@@ -128,11 +222,11 @@ include __DIR__ . '/includes/header.php';
             <div class="faq-item">
                 <button class="faq-question">
                     <?= htmlspecialchars($faq['question']) ?>
-                    <span class="faq-icon">+</span>
+                    <svg class="faq-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                 </button>
-                <div class="faq-answer">
+                <div class="faq-answer"><div>
                     <p><?= htmlspecialchars($faq['answer']) ?></p>
-                </div>
+                </div></div>
             </div>
             <?php endforeach; ?>
         </div>
@@ -142,9 +236,9 @@ include __DIR__ . '/includes/header.php';
 <section class="section">
     <div class="container">
         <div class="cta-banner">
-            <h2>Ready to start your IT career?</h2>
-            <p>Enrollment takes two minutes. Your first live session could be this week.</p>
-            <a href="/register.php" class="btn btn-primary btn-lg">Enroll Now</a>
+            <h2>Ready to become job-ready in IT?</h2>
+            <p>See the full curriculum, pricing, and what happens right after you enroll.</p>
+            <a href="<?= htmlspecialchars($flagship_url) ?>" class="btn btn-primary btn-lg">View the IT Support Course</a>
         </div>
     </div>
 </section>

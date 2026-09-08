@@ -17,7 +17,7 @@
             Tech Career Academy
         </a>
         <div class="nav-links">
-            <a href="/index.php#courses">Courses</a>
+            <a href="/courses.php">Courses</a>
             <a href="/index.php#testimonials">Testimonials</a>
             <a href="/index.php#faq">FAQ</a>
         </div>
