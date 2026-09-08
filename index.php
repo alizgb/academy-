@@ -17,20 +17,36 @@ try {
     $stmt->execute();
     $flagship = $stmt->fetch();
 
-    $flagship_recordings = [];
+    // "What's inside" is built only from real syllabus data already in the database —
+    // recorded lessons and scheduled live sessions for this exact course, nothing invented.
+    $flagship_items = [];
     if ($flagship) {
         $stmt = $pdo->prepare("SELECT title FROM recordings WHERE course_id = ? ORDER BY uploaded_at ASC LIMIT 6");
         $stmt->execute([$flagship['id']]);
-        $flagship_recordings = $stmt->fetchAll();
+        foreach ($stmt->fetchAll() as $r) {
+            $flagship_items[] = ['label' => $r['title'], 'type' => 'Recorded'];
+        }
+
+        $stmt = $pdo->prepare("SELECT title FROM live_sessions WHERE course_id = ? ORDER BY session_date ASC LIMIT 6");
+        $stmt->execute([$flagship['id']]);
+        foreach ($stmt->fetchAll() as $s) {
+            $flagship_items[] = ['label' => $s['title'], 'type' => 'Live'];
+        }
     }
 
     $testimonials = $pdo->query("SELECT * FROM testimonials ORDER BY sort_order")->fetchAll();
     $faqs = $pdo->query("SELECT * FROM faqs ORDER BY sort_order")->fetchAll();
 } catch (Exception $e) {
     $flagship = null;
-    $flagship_recordings = [];
+    $flagship_items = [];
     $testimonials = $faqs = [];
 }
+
+// Always answer this specific purchase objection, regardless of what's seeded in the faqs table.
+$faqs[] = [
+    'question' => 'What happens after I enroll?',
+    'answer' => "You'll get access to your student dashboard right away — your upcoming live sessions appear there with a direct Teams join link, along with any recordings already available for the course.",
+];
 
 $flagship_url = $flagship ? '/course.php?slug=' . urlencode($flagship['slug']) : '/courses.php';
 
@@ -84,6 +100,9 @@ include __DIR__ . '/includes/header.php';
             <li class="outcome-item"><?= tca_check() ?><span>Manage Windows environments</span></li>
             <li class="outcome-item"><?= tca_check() ?><span>Understand networking fundamentals</span></li>
         </ul>
+        <div class="transformation-cta">
+            <a href="<?= htmlspecialchars($flagship_url) ?>" class="btn btn-outline">Explore the IT Support Course</a>
+        </div>
     </div>
 </section>
 
@@ -121,9 +140,9 @@ include __DIR__ . '/includes/header.php';
             <div class="flagship-side">
                 <h4>What's inside</h4>
                 <ul>
-                    <?php if (!empty($flagship_recordings)): ?>
-                        <?php foreach ($flagship_recordings as $r): ?>
-                            <li><?= htmlspecialchars($r['title']) ?></li>
+                    <?php if (!empty($flagship_items)): ?>
+                        <?php foreach ($flagship_items as $item): ?>
+                            <li><span class="item-type"><?= htmlspecialchars($item['type']) ?></span><?= htmlspecialchars($item['label']) ?></li>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <li>Full syllabus published on the course page</li>
@@ -158,7 +177,7 @@ include __DIR__ . '/includes/header.php';
     </div>
 </section>
 
-<section class="section section-alt" id="instructor">
+<section class="section section-alt section-compact" id="instructor">
     <div class="container">
         <div class="section-header">
             <span class="eyebrow">Instructor</span>
@@ -188,7 +207,6 @@ include __DIR__ . '/includes/header.php';
                 $is_hire_proof = (stripos($t['quote'], 'job') !== false) || (stripos($t['role_text'], ' at ') !== false);
             ?>
             <div class="testimonial-card<?= $is_hire_proof ? ' featured' : '' ?>">
-                <?php if ($is_hire_proof): ?><span class="testimonial-badge">Real hiring outcome</span><?php endif; ?>
                 <p class="testimonial-quote">&ldquo;<?= htmlspecialchars($t['quote']) ?>&rdquo;</p>
                 <div class="testimonial-author">
                     <div class="author-avatar"><?= $initials ?></div>
@@ -197,13 +215,14 @@ include __DIR__ . '/includes/header.php';
                         <div class="author-role"><?= htmlspecialchars($t['role_text']) ?></div>
                     </div>
                 </div>
+                <?php if ($is_hire_proof): ?><span class="testimonial-badge">Real hiring outcome</span><?php endif; ?>
             </div>
             <?php endforeach; ?>
         </div>
     </div>
 </section>
 
-<section class="section section-alt" id="certificate">
+<section class="section section-alt section-compact" id="certificate">
     <div class="container">
         <div class="certificate-block">
             <?= tca_asset_slot('Certificate preview — asset needed') ?>
@@ -216,7 +235,7 @@ include __DIR__ . '/includes/header.php';
     </div>
 </section>
 
-<section class="section" id="faq">
+<section class="section section-compact" id="faq">
     <div class="container">
         <div class="section-header">
             <span class="eyebrow">FAQ</span>
