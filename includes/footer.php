@@ -11,9 +11,9 @@
             <div class="footer-col">
                 <h4>Tracks</h4>
                 <ul>
-                    <li><a href="/index.php#courses">IT Support</a></li>
-                    <li><a href="/index.php#courses">Networking</a></li>
-                    <li><a href="/index.php#courses">Basic Computer Skills</a></li>
+                    <li><a href="/courses.php?category=it-support">IT Support</a></li>
+                    <li><span class="footer-soon">Networking <em>Coming soon</em></span></li>
+                    <li><span class="footer-soon">Basic Computer Skills <em>Coming soon</em></span></li>
                 </ul>
             </div>
             <div class="footer-col">
@@ -38,12 +38,8 @@
     </div>
 </footer>
 
-<a href="https://wa.me/10000000000?text=Hi!%20I%20have%20a%20question%20about%20Tech%20Career%20Academy" target="_blank" rel="noopener" class="whatsapp-widget">
+<a href="https://wa.me/96176485052?text=Hi!%20I%20have%20a%20question%20about%20Tech%20Career%20Academy" target="_blank" rel="noopener" class="whatsapp-widget" aria-label="Chat with us on WhatsApp">
     <span class="whatsapp-icon">&#9742;</span>
-    <span class="whatsapp-text">
-        <strong>Still have questions?</strong>
-        <span>Chat with us on WhatsApp</span>
-    </span>
 </a>
 
 <script src="/assets/js/main.js"></script>
