@@ -414,7 +414,7 @@ h1, h2, h3, h4 {
     color: var(--foreground);
 }
 .flagship-side ul li:last-child { border-bottom: none; }
-.flagship-side .item-type {
+.item-type {
     display: inline-block;
     font-size: 10.5px;
     font-weight: 700;
@@ -423,6 +423,68 @@ h1, h2, h3, h4 {
     color: var(--dim);
     margin-right: 8px;
 }
+
+/* ============ SYLLABUS (course page) ============ */
+.syllabus-group { margin-bottom: 28px; }
+.syllabus-group:last-child { margin-bottom: 0; }
+.syllabus-group h4 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted-foreground);
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+.syllabus-group ul li {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 15px;
+    color: var(--foreground);
+}
+.syllabus-group ul li:last-child { border-bottom: none; }
+
+/* ============ PROSE (course description) ============ */
+.prose {
+    color: var(--foreground);
+    font-size: 16px;
+    line-height: 1.8;
+    white-space: pre-line;
+    max-width: 720px;
+}
+
+/* ============ PRICING CARD (course page) ============ */
+.pricing-card {
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--primary);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    max-width: 480px;
+    background: var(--card);
+}
+.pricing-card .price-label {
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted-foreground);
+    font-weight: 600;
+}
+.pricing-card .price { font-size: 44px; font-weight: 700; letter-spacing: -0.02em; margin: 6px 0 4px; }
+.pricing-card .price-sub { color: var(--muted-foreground); font-size: 14px; margin-bottom: 24px; }
+.pricing-includes { margin-bottom: 28px; }
+.pricing-includes li {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 14.5px;
+    color: var(--foreground);
+}
+.pricing-includes .check { color: var(--primary); flex-shrink: 0; width: 18px; }
+
+.price-layout { display: grid; grid-template-columns: auto 1fr; gap: 48px; align-items: start; }
+.price-layout .reassurance { max-width: 380px; padding-top: 8px; }
+.price-layout .reassurance p { color: var(--muted-foreground); font-size: 15px; margin-bottom: 14px; line-height: 1.7; }
 
 /* ============ COURSE CARDS (course listing page) ============ */
 .course-grid {
@@ -1005,6 +1067,8 @@ footer {
     .hero-visual .asset-slot { min-height: 220px; }
     .proof-layout { grid-template-columns: 1fr; }
     .proof-visual .asset-slot { min-height: 220px; }
+    .price-layout { grid-template-columns: 1fr; }
+    .pricing-card { max-width: none; padding: 28px; }
 }
 
 @media (max-width: 600px) {
