@@ -9,7 +9,7 @@
     --j-surface: #FFFFFF;
     --j-text: #161616;
     --j-text-muted: #5B5F66;
-    --j-text-dim: #8A8F98;
+    --j-text-dim: #6C7078; /* darkened from #8A8F98 to clear WCAG AA (4.5:1) on --j-bg/--j-surface */
     --j-border: #E4E2DD;
     --j-accent: #2A5CE0;
     --j-accent-soft: #EAF0FE;
@@ -131,7 +131,7 @@
     font-weight: 500;
     color: var(--j-text);
     cursor: pointer;
-    transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
+    transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.15s ease, opacity 0.2s ease;
     min-height: 56px;
 }
 
@@ -372,7 +372,7 @@
     width: 20px;
 }
 
-.journey-lesson-title { font-weight: 500; }
+.journey-lesson-title { font-weight: 500; flex: 1; min-width: 0; overflow-wrap: anywhere; }
 
 /* ============ POSITIONING + CTA ============ */
 .journey-positioning {
@@ -427,7 +427,7 @@
 .journey-noscript p { color: var(--j-text-muted); font-size: 17px; line-height: 1.6; margin-bottom: 32px; }
 
 /* ============ PREMIUM COURSE PAGE (course.php, IT Support only) ============ */
-.course-premium { padding: 0 0 100px; }
+.course-premium { min-height: 100vh; padding: 0 0 100px; }
 
 .course-premium-hero {
     padding: 64px 24px 56px;
@@ -503,4 +503,17 @@
     .journey-stage { padding: 24px 16px 56px; }
     .journey-option { padding: 16px; }
     .course-premium-meta { gap: 20px; justify-content: flex-start; text-align: left; }
+}
+
+/* ============ SCOPE OVERRIDE: journey/premium pages only ============
+   Page-scoped via :has() so header.php and footer.php stay untouched and
+   every other page keeps the existing global navbar + WhatsApp widget
+   exactly as-is. If a browser doesn't support :has(), these rules simply
+   don't apply — the old navbar/widget just remain visible (today's
+   already-shipped behavior), never a broken layout. */
+body:has(> .journey) .navbar,
+body:has(> .course-premium) .navbar,
+body:has(> .journey) .whatsapp-widget,
+body:has(> .course-premium) .whatsapp-widget {
+    display: none;
 }

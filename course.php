@@ -36,13 +36,10 @@ if ($is_it_support) {
     }
 }
 
-// Confirmed high-level curriculum overview for the IT Support course only
-// (mirrors assets/js/journey.js — kept as static copy, not DB data).
-$premium_modules = [
-    ['title' => 'IT Foundations & Computer Architecture', 'desc' => 'How computers, hardware, and operating systems actually work under the hood.'],
-    ['title' => 'Operating Systems Administration', 'desc' => 'Configuring, maintaining, and supporting Windows environments like a real IT professional.'],
-    ['title' => 'Professional Troubleshooting Methodology', 'desc' => 'A repeatable method for diagnosing real problems, not guesswork.'],
-];
+// Confirmed high-level curriculum overview for the IT Support course only —
+// single source of truth shared with it-support-journey.php, so the wording
+// can't drift between the two pages.
+$premium_modules = $is_it_support ? require __DIR__ . '/includes/it-support-modules.php' : [];
 
 $is_enrolled = false;
 if (is_logged_in()) {
@@ -70,6 +67,9 @@ if ($is_it_support): ?>
 <link rel="stylesheet" href="/assets/css/journey.css">
 
 <div class="course-premium">
+    <div class="journey-topbar">
+        <a href="/index.php" class="journey-logo">Tech Career Academy</a>
+    </div>
     <div class="course-premium-hero">
         <div class="course-premium-eyebrow"><?= htmlspecialchars($course['category_name']) ?></div>
         <h1><?= htmlspecialchars($course['title']) ?></h1>

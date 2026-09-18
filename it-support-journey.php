@@ -37,12 +37,17 @@ $course_link = $it_course
     ? '/course.php?slug=' . urlencode($it_course['slug'])
     : '/courses.php?category=it-support';
 
-$page_title = 'Your IT Support Path';
+$premium_modules = require __DIR__ . '/includes/it-support-modules.php';
+
+$page_title = 'Your IT Support Path — Start Here';
 include __DIR__ . '/includes/header.php';
 ?>
 <link rel="stylesheet" href="/assets/css/journey.css">
 
 <div class="journey">
+    <div class="journey-topbar">
+        <a href="/index.php" class="journey-logo">Tech Career Academy</a>
+    </div>
     <main class="journey-stage" id="journey-stage" data-course-link="<?= htmlspecialchars($course_link) ?>" aria-live="polite">
         <noscript>
             <div class="journey-noscript">
@@ -61,6 +66,7 @@ include __DIR__ . '/includes/header.php';
 </div>
 
 <script id="journey-lessons" type="application/json"><?= json_encode($lessons, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?></script>
+<script id="journey-modules" type="application/json"><?= json_encode($premium_modules, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?></script>
 <script src="/assets/js/journey.js"></script>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>

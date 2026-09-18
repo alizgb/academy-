@@ -20,11 +20,16 @@
         lessons = [];
     }
 
-    var MODULE_PATH = [
-        { title: 'IT Foundations & Computer Architecture', desc: 'How computers, hardware, and operating systems actually work under the hood.' },
-        { title: 'Operating Systems Administration', desc: 'Configuring, maintaining, and supporting Windows environments like a real IT professional.' },
-        { title: 'Professional Troubleshooting Methodology', desc: 'A repeatable method for diagnosing real problems — not guesswork.' }
-    ];
+    // Single source of truth is includes/it-support-modules.php — embedded here
+    // as JSON (mirrors the lessons pattern below) so the copy can't drift
+    // between this page and course.php's premium template.
+    var MODULE_PATH = [];
+    try {
+        var modulesEl = document.getElementById('journey-modules');
+        if (modulesEl) MODULE_PATH = JSON.parse(modulesEl.textContent || '[]');
+    } catch (e) {
+        MODULE_PATH = [];
+    }
 
     var SCRIPT = {
         q1: {
@@ -87,10 +92,10 @@
 
     var state = { current: 'q1', answers: {} };
 
-    function el(tag, cls, html) {
+    function el(tag, cls, text) {
         var n = document.createElement(tag);
         if (cls) n.className = cls;
-        if (html !== undefined) n.innerHTML = html;
+        if (text !== undefined) n.textContent = text;
         return n;
     }
 
@@ -190,6 +195,12 @@
             var cta = el('button', 'journey-continue', def.next === 'result' ? 'See your path →' : 'Continue →');
             cta.type = 'button';
             cta.addEventListener('click', function () {
+                // State-based guard: once clicked/activated, disable immediately
+                // so a fast double-click/double-tap (or a second Enter/Space)
+                // can't fire a second transition. Native `disabled` also blocks
+                // keyboard activation after the first press, which is the point.
+                if (cta.disabled) return;
+                cta.disabled = true;
                 transitionTo(function () {
                     if (def.next === 'result') {
                         renderResult();
@@ -202,10 +213,48 @@
 
             container.appendChild(response);
             stage.appendChild(container);
-            var heading = container.querySelector('.journey-response-mark');
-            heading.setAttribute('tabindex', '-1');
-            heading.focus();
+            // Move focus to the Continue button rather than the decorative,
+            // aria-hidden checkmark: it's visible, meaningful, keyboard-
+            // accessible, and already has a defined focus style. The response
+            // text itself is announced via the stage's aria-live region.
+            cta.focus();
         });
+    }
+
+    // Deterministic result personalization keyed on the existing q1/q2/q3
+    // option IDs. First-match priority order, with a q3-keyed fallback that
+    // covers every remaining combination. No AI/LLM, no invented facts, no
+    // employment/salary claims — every line is predefined copy.
+    function personalizedResultLine(answers) {
+        var q1 = answers.q1, q2 = answers.q2, q3 = answers.q3;
+
+        if (q1 === 'student') {
+            return "You already have the theory. This path is where you connect it to practice — troubleshooting, systems, and the practical side of supporting real users.";
+        }
+        if (q1 === 'already-helping' && (q2 === 'no-experience' || q3 === 'goal-confidence')) {
+            return "You already have a starting point. What's missing is structure — turning what you already know into a practical IT Support skillset you can build on.";
+        }
+        if (q1 === 'first-job' && q3 === 'goal-first-job') {
+            return "You're starting from the beginning, so the focus is building a practical IT Support foundation — troubleshooting, systems, and real support scenarios, not just theory.";
+        }
+        if (q1 === 'low-pay' && q3 === 'goal-raise') {
+            return "This isn't about starting over. It's about building a practical IT Support skillset that you can add to what you already know and use as your next step.";
+        }
+
+        switch (q3) {
+            case 'goal-first-job':
+                return "The goal is simple: build a practical IT Support foundation you can apply in real situations and continue building from.";
+            case 'goal-raise':
+                return "The goal is to build a practical skillset you can put to work and carry into your next opportunity.";
+            case 'goal-confidence':
+                return "This path is built around practice, not just theory — so you can build confidence by actually working through IT problems.";
+            case 'goal-foundation':
+            default:
+                // 'goal-foundation', plus a defensive default (unreachable in
+                // the normal flow, since q3 is always one of the 4 ids above
+                // by the time renderResult() runs) so this never throws.
+                return "This path gives you a practical IT Support foundation — a solid place to start as you decide where you want to go next.";
+        }
     }
 
     function renderResult() {
@@ -214,7 +263,7 @@
         var intro = el('div', 'journey-result-intro');
         intro.appendChild(el('div', 'journey-result-eyebrow', "YOU'VE FOUND THE RIGHT PATH"));
         intro.appendChild(el('h1', 'journey-question', 'Your IT Support Path'));
-        intro.appendChild(el('p', 'journey-subtext', "We've built a practical IT Support journey to take you from where you are today to being ready for real IT work."));
+        intro.appendChild(el('p', 'journey-subtext', personalizedResultLine(state.answers)));
         container.appendChild(intro);
 
         var path = el('div', 'journey-path');
