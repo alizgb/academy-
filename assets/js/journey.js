@@ -38,10 +38,10 @@
                 { id: 'student', emoji: '🎓', label: "I'm a tech student" }
             ],
             responses: {
-                'first-job': "That's a clear starting point.\n\nMost people trying to break into IT don't fail because they're not capable — they fail because they don't know which skills actually get you hired, or how to prove you can do the job before anyone gives you a chance.\n\nIT Support is one of the few places in tech that still hires people without a degree or years of experience, if you can show you actually know how to support real systems and real users.",
-                'low-pay': "That's a common place to be, and a frustrating one.\n\nSwitching careers can feel risky, especially when you don't know if a new field will actually pay off. IT Support works as a way out because it doesn't require starting over from zero, and demand for people who can support systems and users is constant.\n\nLet's see what's actually been holding you back.",
-                'already-helping': "That matters more than you probably think.\n\nA lot of people already do IT-support-shaped work informally, fixing a relative's laptop, being “the tech person” at the office, without realizing it's a real, paid skillset. The gap usually isn't ability. It's structure: knowing what to learn next and how to present what you already know.\n\nLet's find that gap.",
-                'student': "Good, you already have some foundation to build on.\n\nThe problem most tech students run into isn't theory, it's the opposite: heavy on concepts, light on the hands-on troubleshooting and support skills that real IT jobs test for on day one.\n\nLet's figure out exactly where that gap is for you."
+                'first-job': "That's a clear starting point.\n\nGetting your first IT job can be frustrating when you don't know which skills to focus on — or how to prove you can actually do the work when you haven't had the chance yet.\n\nYou don't need to learn everything in IT. You need to build the right foundation and learn how to apply it in real situations.\n\nLet's figure out what's been getting in your way.",
+                'low-pay': "We get it.\n\nWorking hard but feeling like your career and income aren't moving forward isn't easy.\n\nIT Support can give you a practical skillset to build a new career path — but first, let's understand where you're starting from.\n\nLet's see what's been getting in your way.",
+                'already-helping': "That matters more than you probably think.\n\nYou might already be the person friends, family, or coworkers call when something stops working.\n\nThat experience is valuable — but helping people informally and working in IT professionally aren't quite the same thing.\n\nThe next step is turning what you already know into a structured skillset you can build on.\n\nLet's find that gap.",
+                'student': "Good — you already have a foundation to build on.\n\nStudying technology gives you concepts and knowledge. But working in IT also means troubleshooting problems, supporting users, working with systems, and knowing what to do when things don't go as planned.\n\nThe goal is to connect what you learn with how IT actually works in practice.\n\nLet's figure out where that gap is for you."
             },
             next: 'q2'
         },
@@ -57,11 +57,11 @@
                 { id: 'tried-youtube', label: "I've tried YouTube and online courses, but they didn't really help me" }
             ],
             responses: {
-                'no-start': "That's the most common place to feel stuck.\n\nThere's so much conflicting advice out there, certifications, coding, networking, cloud, that “just start somewhere” can feel impossible without a clear first step.\n\nIT Support is designed to be that first step: one practical track, not ten different paths to choose between.",
-                'no-skills': "That's the problem.\n\nYou can't build a better career by staying with the same skills you already have.\n\nThe good news? IT Support is a skill you can build step by step, without needing to know everything from day one.\n\nLet's figure out what you want that new skillset to do for you.",
-                'no-experience': "That's a very specific, and very fixable, problem.\n\nCompanies hiring for IT Support don't just want to know you understand computers. They want proof you've actually troubleshot real problems under real conditions.\n\nThat's exactly what hands-on practice is for, not more theory, more reps.",
-                'no-clarity': "That's a real blind spot, and it's not your fault, most course descriptions don't say it plainly.\n\nWhat IT Support hiring actually looks for is consistent: a troubleshooting method, comfort with Windows environments, ticketing systems, and being able to explain technical problems to non-technical people.\n\nThat's precisely what this path is built around.",
-                'tried-youtube': "That's frustrating, and common. Scattered videos give you information, not a path, and no way to know if you're actually ready.\n\nWhat's usually missing isn't more content. It's structure, practice, and a clear sense of progress.\n\nLet's build that."
+                'no-start': "That's completely okay.\n\nGetting into IT can feel confusing when there are so many skills, tools, and technologies to learn.\n\nYou don't need to know everything. You need to know what to learn first.\n\nThat's where we'll start.\n\nNow let's figure out what you want that first step to lead to.",
+                'no-skills': "That's the problem.\n\nYou can't build a better career by staying with the same skills you already have.\n\nThe good news? IT Support is a skill you can build step by step — without needing to know everything from day one.\n\nLet's figure out what you want that new skillset to do for you.",
+                'no-experience': "That's the gap.\n\nYou may already understand the basics, but knowing something and being able to handle a real IT problem are two different things.\n\nThat's where practical experience changes things.\n\nInstead of only learning what a solution is, you need opportunities to troubleshoot, make decisions, and work through realistic IT problems.\n\nLet's figure out what you want that experience to lead to.",
+                'no-clarity': "That can make job hunting confusing.\n\nYou might have certificates, watch tutorials, or study different IT topics — but still wonder whether you're learning the things employers actually look for in IT Support roles.\n\nThe goal isn't to learn everything. It's to build practical skills you can actually use at work.\n\nLet's figure out what you want your next step to be.",
+                'tried-youtube': "We understand.\n\nThere's a lot of IT content online, but watching videos and finishing random courses doesn't always give you a clear path or practical experience.\n\nWhat's usually missing isn't more content. It's structure, practice, and a clear sense of progress.\n\nThat's what we're building here.\n\nLet's figure out where you want to take it."
             },
             next: 'q3'
         },
@@ -71,15 +71,15 @@
             subtext: "Let's make sure the path actually matches your goal.",
             options: [
                 { id: 'goal-first-job', label: 'A real shot at my first IT job' },
-                { id: 'goal-raise', label: 'A raise or a step up from where I am now' },
-                { id: 'goal-confidence', label: 'Confidence that I actually know what I’m doing' },
-                { id: 'goal-foundation', label: 'A foundation I can build on later (networking, security, etc.)' }
+                { id: 'goal-raise', label: 'A raise or a better position' },
+                { id: 'goal-confidence', label: 'Confidence that I can actually handle IT problems' },
+                { id: 'goal-foundation', label: 'A foundation for where I want to go next' }
             ],
             responses: {
-                'goal-first-job': "Then the priority isn't more theory, it's proof. A structured, practical IT Support track is exactly how people without prior experience get taken seriously.",
-                'goal-raise': "Then this isn't about starting over, it's about adding a concrete, in-demand skillset on top of what you already bring to work.",
-                'goal-confidence': "That comes from doing the work, not just watching it. Hands-on troubleshooting practice is what turns “I think I get it” into “I know I can do this.”",
-                'goal-foundation': "Good instinct. IT Support is the foundation nearly every other IT specialization builds on. Starting here keeps every future path open."
+                'goal-first-job': "Then your goal is clear.\n\nYou need more than information — you need a foundation you can actually apply.\n\nThat's why this path focuses on practical IT Support skills, troubleshooting, and working through real-world situations.\n\nLet's show you what that path looks like.",
+                'goal-raise': "Then you're looking for progress, not a complete restart.\n\nBuilding practical IT Support skills can give you another skillset to bring into your current career or use as a step toward something new.\n\nLet's show you what that path looks like.",
+                'goal-confidence': "That confidence comes from practice.\n\nIt's one thing to understand a concept. It's another to face a problem and know how to approach it.\n\nThe goal is to build that confidence by learning and practicing how IT problems are actually handled.\n\nLet's show you what that path looks like.",
+                'goal-foundation': "That's a strong place to start.\n\nIT Support gives you exposure to computers, operating systems, troubleshooting, users, and the environments you'll encounter in IT.\n\nFrom there, you can build toward the area you want to specialize in next.\n\nLet's show you what that path looks like."
             },
             next: 'result'
         }
