@@ -1,0 +1,506 @@
+/* ============================================
+   TECH CAREER ACADEMY — IT SUPPORT JOURNEY
+   Scoped design system: .journey / .course-premium only.
+   Does not touch global tokens in style.css.
+   ============================================ */
+
+.journey, .course-premium {
+    --j-bg: #FAFAF8;
+    --j-surface: #FFFFFF;
+    --j-text: #161616;
+    --j-text-muted: #5B5F66;
+    --j-text-dim: #8A8F98;
+    --j-border: #E4E2DD;
+    --j-accent: #2A5CE0;
+    --j-accent-soft: #EAF0FE;
+    --j-success: #1F8A5C;
+    --j-radius: 10px;
+    --j-max: 640px;
+    background: var(--j-bg);
+    color: var(--j-text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.journey *, .course-premium * { box-sizing: border-box; }
+
+.journey h1, .journey h2, .journey h3,
+.course-premium h1, .course-premium h2, .course-premium h3 {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--j-text);
+}
+
+/* ============ JOURNEY PAGE SHELL ============ */
+.journey {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.journey-topbar {
+    padding: 24px 24px 0;
+}
+
+.journey-logo {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--j-text);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+}
+
+.journey-stage {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px 80px;
+}
+
+.journey-step {
+    width: 100%;
+    max-width: var(--j-max);
+    margin: 0 auto;
+}
+
+/* ============ PROGRESS ============ */
+.journey-progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 28px;
+    justify-content: center;
+}
+
+.journey-progress-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--j-border);
+    transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+.journey-progress-dot.is-done { background: var(--j-accent); }
+.journey-progress-dot.is-current { background: var(--j-accent); transform: scale(1.5); }
+
+.journey-progress-label {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+/* ============ QUESTION TYPOGRAPHY ============ */
+.journey-question {
+    font-size: clamp(28px, 5vw, 44px);
+    line-height: 1.15;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.journey-subtext {
+    font-size: 17px;
+    color: var(--j-text-muted);
+    text-align: center;
+    max-width: 440px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+}
+
+/* ============ OPTIONS ============ */
+.journey-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.journey-option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    text-align: left;
+    background: var(--j-surface);
+    border: 1px solid var(--j-border);
+    border-radius: var(--j-radius);
+    padding: 18px 20px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--j-text);
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
+    min-height: 56px;
+}
+
+.journey-option:hover {
+    border-color: var(--j-accent);
+    background: var(--j-accent-soft);
+}
+
+.journey-option:focus-visible {
+    outline: 2px solid var(--j-accent);
+    outline-offset: 2px;
+}
+
+.journey-option:active { transform: scale(0.99); }
+
+.journey-option-emoji {
+    font-size: 20px;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.journey-option.is-selected {
+    border-color: var(--j-accent);
+    background: var(--j-accent-soft);
+}
+
+.journey-option-check {
+    margin-left: auto;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--j-accent);
+    color: #fff;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    opacity: 0;
+    transform: scale(0.6);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.journey-option.is-selected .journey-option-check {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.journey-options.is-locked .journey-option:not(.is-selected) {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+/* ============ RESPONSE (recognition/insight) ============ */
+.journey-response {
+    text-align: center;
+    padding-top: 8px;
+}
+
+.journey-response-mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--j-accent-soft);
+    color: var(--j-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.journey-response-text {
+    font-size: 19px;
+    line-height: 1.7;
+    color: var(--j-text);
+    max-width: 480px;
+    margin: 0 auto 40px;
+}
+
+.journey-response-text p { margin-bottom: 16px; }
+.journey-response-text p:last-child { margin-bottom: 0; }
+
+.journey-continue {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--j-text);
+    color: #fff;
+    border: none;
+    border-radius: var(--j-radius);
+    padding: 14px 28px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.journey-continue:hover { background: var(--j-accent); }
+.journey-continue:focus-visible { outline: 2px solid var(--j-accent); outline-offset: 2px; }
+
+/* ============ TRANSITIONS ============ */
+.journey-fade-in {
+    animation: journeyFadeIn 0.35s ease both;
+}
+
+.journey-fade-out {
+    animation: journeyFadeOut 0.2s ease both;
+}
+
+@keyframes journeyFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes journeyFadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .journey-fade-in, .journey-fade-out { animation: none !important; }
+    .journey *, .course-premium * { transition-duration: 0.01ms !important; }
+}
+
+/* ============ RESULT SCREEN ============ */
+.journey-result-intro {
+    text-align: center;
+    margin-bottom: 56px;
+}
+
+.journey-result-eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--j-accent);
+    margin-bottom: 12px;
+}
+
+/* ============ MODULE PATH (shared: journey result + course page) ============ */
+.journey-path {
+    max-width: 520px;
+    margin: 0 auto 48px;
+}
+
+.journey-path-step {
+    display: flex;
+    gap: 18px;
+    position: relative;
+    padding-bottom: 36px;
+}
+
+.journey-path-step:last-child { padding-bottom: 0; }
+
+.journey-path-step::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 40px;
+    bottom: 0;
+    width: 1px;
+    background: var(--j-border);
+}
+
+.journey-path-step:last-child::before { display: none; }
+
+.journey-path-num {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--j-surface);
+    border: 1px solid var(--j-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--j-text);
+    z-index: 1;
+}
+
+.journey-path-step.is-final .journey-path-num {
+    background: var(--j-accent);
+    border-color: var(--j-accent);
+    color: #fff;
+}
+
+.journey-path-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.journey-path-desc {
+    font-size: 14px;
+    color: var(--j-text-muted);
+    line-height: 1.5;
+}
+
+/* ============ LESSON LIST (real DB content) ============ */
+.journey-lessons {
+    max-width: 560px;
+    margin: 0 auto 48px;
+    border: 1px solid var(--j-border);
+    border-radius: var(--j-radius);
+    background: var(--j-surface);
+    overflow: hidden;
+}
+
+.journey-lessons-header {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--j-border);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--j-text-dim);
+}
+
+.journey-lesson-row {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--j-border);
+    font-size: 15px;
+}
+
+.journey-lesson-row:last-child { border-bottom: none; }
+
+.journey-lesson-index {
+    font-size: 13px;
+    color: var(--j-text-dim);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+    width: 20px;
+}
+
+.journey-lesson-title { font-weight: 500; }
+
+/* ============ POSITIONING + CTA ============ */
+.journey-positioning {
+    text-align: center;
+    max-width: 480px;
+    margin: 0 auto 40px;
+}
+
+.journey-positioning h3 {
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+
+.journey-positioning p {
+    color: var(--j-text-muted);
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.journey-cta-wrap {
+    text-align: center;
+}
+
+.journey-cta-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--j-accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--j-radius);
+    padding: 18px 36px;
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.journey-cta-primary:hover { background: #1E4BC7; transform: translateY(-1px); }
+.journey-cta-primary:focus-visible { outline: 2px solid var(--j-text); outline-offset: 3px; }
+
+/* ============ NOSCRIPT FALLBACK ============ */
+.journey-noscript {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+    text-align: center;
+}
+
+.journey-noscript h1 { font-size: 32px; margin-bottom: 16px; }
+.journey-noscript p { color: var(--j-text-muted); font-size: 17px; line-height: 1.6; margin-bottom: 32px; }
+
+/* ============ PREMIUM COURSE PAGE (course.php, IT Support only) ============ */
+.course-premium { padding: 0 0 100px; }
+
+.course-premium-hero {
+    padding: 64px 24px 56px;
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.course-premium-eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--j-accent);
+    margin-bottom: 16px;
+}
+
+.course-premium-hero h1 {
+    font-size: clamp(32px, 5vw, 48px);
+    line-height: 1.15;
+    margin-bottom: 20px;
+}
+
+.course-premium-hero p {
+    font-size: 18px;
+    color: var(--j-text-muted);
+    line-height: 1.6;
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+.course-premium-meta {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    max-width: 720px;
+    margin: 32px auto 0;
+    padding: 24px 0;
+    border-top: 1px solid var(--j-border);
+    border-bottom: 1px solid var(--j-border);
+    font-size: 14px;
+}
+
+.course-premium-meta strong { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--j-text-dim); margin-bottom: 4px; font-weight: 600; }
+
+.course-premium-section {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 56px 24px 0;
+}
+
+.course-premium-section-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--j-text-dim);
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.course-premium-desc {
+    color: var(--j-text-muted);
+    line-height: 1.8;
+    white-space: pre-line;
+}
+
+.course-premium-cta {
+    padding: 56px 24px 0;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .journey-stage { padding: 24px 16px 56px; }
+    .journey-option { padding: 16px; }
+    .course-premium-meta { gap: 20px; justify-content: flex-start; text-align: left; }
+}

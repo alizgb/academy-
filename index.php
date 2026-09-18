@@ -84,7 +84,11 @@ include __DIR__ . '/includes/header.php';
                 </p>
                 <div class="category-meta">
                     <span><?= (int)$cat['course_count'] ?> course<?= $cat['course_count'] == 1 ? '' : 's' ?></span>
+                    <?php if ($cat['slug'] === 'it-support'): ?>
+                    <a href="/it-support-journey.php" class="category-link">Start your path &rarr;</a>
+                    <?php else: ?>
                     <a href="/courses.php?category=<?= urlencode($cat['slug']) ?>" class="category-link">View courses &rarr;</a>
+                    <?php endif; ?>
                 </div>
             </div>
             <?php endforeach; ?>
